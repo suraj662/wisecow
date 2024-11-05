@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wisecow-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Redirects all HTTP traffic to HTTPS
+spec:
+  tls:
+  - hosts:
+      - yourdomain.com     # Replace with your domain if you have one
+    secretName: wisecow-tls # Refers to the TLS Secret created above
+  rules:
+  - host: yourdomain.com     # Replace with your domain or use localhost for testing
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wisecow-service  # Name of the Service created in Step 2
+            port:
+              number: 80           # Port the Service is exposing (matches wisecow-service.yaml)
